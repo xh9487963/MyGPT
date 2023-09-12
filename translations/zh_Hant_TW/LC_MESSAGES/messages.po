@@ -72,3 +72,11 @@ msgstr "網頁訪問"
 #:
 msgid "Version"
 msgstr "版本"
+
+#:
+msgid "Save"
+msgstr "保存對話"
+
+#
+msgid "Username"
+msgstr "用戶"

@@ -64,17 +64,20 @@ const ask_gpt = async (message) => {
 		model = document.getElementById("model");
 		prompt_lock = true;
 		window.text = ``;
+		//随机生成会话id
 		window.token = message_id();
 
 		stop_generating.classList.remove(`stop-generating-hidden`);
 
+		//把用户说过的话添加到上面的会话框里
 		add_user_message_box(message);
 
 		message_box.scrollTop = message_box.scrollHeight;
 		window.scrollTo(0, 0);
 		await new Promise((r) => setTimeout(r, 500));
 		window.scrollTo(0, 0);
-
+		
+		//添加GPT的图标
 		message_box.innerHTML += `
             <div class="message">
                 <div class="avatar-container">
@@ -101,7 +104,8 @@ const ask_gpt = async (message) => {
 			body: JSON.stringify({
 				conversation_id: window.conversation_id,
 				action: `_ask`,
-				model: model.options[model.selectedIndex].value,
+				model: model.options[model.selectedIndex].value.slice(0, -1),
+				model_detail: model.options[model.selectedIndex].value.slice(-1),
 				jailbreak: jailbreak.options[jailbreak.selectedIndex].value,
 				meta: {
 					id: window.token,
@@ -231,6 +235,7 @@ const clear_conversation = async () => {
 
 const delete_conversation = async (conversation_id) => {
 	localStorage.removeItem(`conversation:${conversation_id}`);
+	localStorage.removeItem(`conversation:${conversation_id}_time`);
 
 	if (window.conversation_id == conversation_id) {
 		await new_conversation();
@@ -324,16 +329,34 @@ const add_conversation = async (conversation_id, title) => {
 				items: [],
 			})
 		);
+		localStorage.setItem(
+			`conversation:${conversation_id}_time`,
+			JSON.stringify({
+				id: conversation_id,
+				title: title,
+				username: localStorage.getItem('USER_NAME'),
+				items: [],
+			})
+		);
 	}
 };
 
 const add_message = async (conversation_id, role, content) => {
 	before_adding = JSON.parse(localStorage.getItem(`conversation:${conversation_id}`));
+	before_adding_time = JSON.parse(localStorage.getItem(`conversation:${conversation_id}_time`));
 
 	before_adding.items.push({
 		role: role,
 		content: content,
 	});
+
+	before_adding_time.items.push({
+		role: role,
+		content: content,
+		time: new Date().toLocaleString()
+	});
+
+	localStorage.setItem(`conversation:${conversation_id}_time`, JSON.stringify(before_adding_time)); // update conversation_time
 
 	localStorage.setItem(`conversation:${conversation_id}`, JSON.stringify(before_adding)); // update conversation
 };
@@ -344,7 +367,7 @@ const load_conversations = async (limit, offset, loader) => {
 
 	let conversations = [];
 	for (let i = 0; i < localStorage.length; i++) {
-		if (localStorage.key(i).startsWith("conversation:")) {
+		if (localStorage.key(i).startsWith("conversation:")  && !localStorage.key(i).endsWith("time") ) {
 			let conversation = localStorage.getItem(localStorage.key(i));
 			conversations.push(JSON.parse(conversation));
 		}
@@ -506,3 +529,26 @@ function createElement(tag, { classNames, id, innerHTML, textContent } = {}) {
 	}
 	return el;
 }
+
+const save_conversation = async (conversation_id) => {
+	let conversation = await JSON.parse(localStorage.getItem(`conversation:${conversation_id}_time`));
+	// 创建一个Blob对象，将JSON数据转换为字符串
+    const jsonString = JSON.stringify(conversation);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+
+    // 创建一个下载链接
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+
+    // 设置文件名
+    downloadLink.download = `${conversation_id}.json`;
+
+    // 模拟用户点击下载链接
+    downloadLink.click();
+};
+
+const downloadButton = document.getElementById('save-conversation');
+downloadButton.addEventListener('click', () => {
+    // 调用保存对话函数
+    save_conversation(window.conversation_id);
+});

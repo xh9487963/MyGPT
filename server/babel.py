@@ -10,7 +10,7 @@ def get_languages_from_dir(directory):
             if os.path.isdir(os.path.join(directory, name))]
 
 
-BABEL_DEFAULT_LOCALE = 'en_US'
+BABEL_DEFAULT_LOCALE = 'zh_Hans_CN'
 BABEL_LANGUAGES = get_languages_from_dir('translations')
 
 

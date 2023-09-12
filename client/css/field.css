@@ -4,6 +4,12 @@
 	padding: 4px;
 }
 
+.field_none {
+	display: none;
+	align-items: center;
+	padding: 4px;
+}
+
 @media screen and (max-width: 990px) {
 	.field {
 		flex-wrap: nowrap;

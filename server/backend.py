@@ -32,13 +32,15 @@ class Backend_Api:
         try:
             jailbreak = request.json['jailbreak']
             model = request.json['model']
+            model_detail = request.json['model_detail']
             messages = build_messages(jailbreak)
 
             # Generate response
             response = ChatCompletion.create(
                 model=model,
+                messages=messages,
                 chatId=conversation_id,
-                messages=messages
+                model_detail=model_detail,
             )
 
             return Response(stream_with_context(generate_stream(response, jailbreak)), mimetype='text/event-stream')

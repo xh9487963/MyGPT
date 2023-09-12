@@ -178,6 +178,11 @@ class Model:
         base_provider: str = 'huggingface'
         best_provider: Provider.Provider = Provider.H2o
 
+    class xiaohe:
+        name: str = 'xiaohe'
+        base_provider: str = 'xiaohe'
+        best_provider: Provider.Provider = Provider.xiaohe
+
 
 class ModelUtils:
     convert: dict = {
@@ -230,4 +235,6 @@ class ModelUtils:
         'falcon-40b': Model.falcon_40b,
         'falcon-7b': Model.falcon_7b,
         'llama-13b': Model.llama_13b,
+
+        'xiaohe': Model.xiaohe
     }

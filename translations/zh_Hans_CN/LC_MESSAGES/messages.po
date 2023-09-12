@@ -72,3 +72,11 @@ msgstr "网络访问"
 #:
 msgid "Version"
 msgstr "版本"
+
+#:
+msgid "Save"
+msgstr "保存对话"
+
+#
+msgid "Username"
+msgstr "用户"

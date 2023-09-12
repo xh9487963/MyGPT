@@ -30,7 +30,8 @@ from .Providers import (
     Yqcloud,
     You,
     Zeabur,
-    Wewordle
+    Wewordle,
+    xiaohe
 )
 
 Palm = Bard
