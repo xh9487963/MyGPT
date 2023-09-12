@@ -9,7 +9,7 @@ ENV PATH="/app/venv/bin:$PATH"
   
 RUN apt-get update && \  
     apt-get install -y --no-install-recommends build-essential libffi-dev cmake libcurl4-openssl-dev && \  
-    pip3 install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+    pip3 install --no-cache-dir -r requirements.txt
   
 COPY . .  
   
