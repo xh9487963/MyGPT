@@ -13,7 +13,7 @@ supports_stream = False
 needs_auth = False
 
 openai.api_key = ''
-api_key_list = ["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"]
+api_key_list = [""]
 
 def _create_completion(model: str, messages: list, stream: bool, **kwargs):
     base = ''
