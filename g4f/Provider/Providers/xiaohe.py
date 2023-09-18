@@ -26,9 +26,7 @@ def _create_completion(model: str, messages: list, stream: bool, **kwargs):
     _app_id = ''.join(random.choices(
         f'{string.ascii_lowercase}{string.digits}', k=31))
     
-    print(int(kwargs['model_detail']))
     openai.api_key = api_key_list[int(kwargs['model_detail']) - 1]
-    print(openai.api_key)
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-16k",
         messages=[

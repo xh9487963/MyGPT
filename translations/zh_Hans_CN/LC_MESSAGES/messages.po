@@ -80,3 +80,7 @@ msgstr "保存对话"
 #
 msgid "Username"
 msgstr "用户"
+
+#
+msgid "Regenerate"
+msgstr "重新生成"

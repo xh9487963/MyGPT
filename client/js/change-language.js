@@ -46,5 +46,3 @@ function changeLanguage(lang) {
         }  
     });  
 }  
-
-changeLanguage('zh_Hans_CN')

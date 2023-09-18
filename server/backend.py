@@ -66,6 +66,8 @@ def build_messages(jailbreak):
     _conversation = request.json['meta']['content']['conversation']
     internet_access = request.json['meta']['content']['internet_access']
     prompt = request.json['meta']['content']['parts'][0]
+    regenerate = prompt['regenerate']
+    del prompt['regenerate']
 
     # Add the existing conversation
     conversation = _conversation
@@ -82,7 +84,8 @@ def build_messages(jailbreak):
         conversation.extend(jailbreak_instructions)
 
     # Add the prompt
-    conversation.append(prompt)
+    if regenerate == False:
+        conversation.append(prompt)
 
     # Reduce conversation size to avoid API Token quantity error
     if len(conversation) > 3:
