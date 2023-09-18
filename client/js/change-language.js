@@ -14,6 +14,7 @@ async function fetchLanguages() {
         languages.forEach(lang => {  
             const option = document.createElement('option');  
             option.value = lang;  
+            if(option.value === 'zh_Hans_CN') option.selected = true;        
             option.textContent = lang;  
             languageSelect.appendChild(option);  
         });  
