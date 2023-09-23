@@ -4,7 +4,7 @@ from g4f import ChatCompletion
 from flask import request, Response, stream_with_context
 from requests import get
 from server.config import special_instructions
-
+import json
 
 class Backend_Api:
     def __init__(self, bp, config: dict) -> None:
@@ -17,6 +17,10 @@ class Backend_Api:
         self.routes = {
             '/backend-api/v2/conversation': {
                 'function': self._conversation,
+                'methods': ['POST']
+            },
+            '/backend-api/v2/save-conversation': {
+                'function': self._save,
                 'methods': ['POST']
             }
         }
@@ -42,7 +46,6 @@ class Backend_Api:
                 chatId=conversation_id,
                 model_detail=model_detail,
             )
-
             return Response(stream_with_context(generate_stream(response, jailbreak)), mimetype='text/event-stream')
 
         except Exception as e:
@@ -54,6 +57,16 @@ class Backend_Api:
                 'success': False,
                 "error": f"an error occurred {str(e)}"
             }, 400
+        
+    def _save(self):
+        conversation = request.json['conversation']
+        username = request.json['username']
+        
+        print(conversation)
+        print(type(conversation))
+        with open('files/' + username +'/' + conversation['id'] + '.json', 'w', encoding='utf-8') as json_file:
+            json.dump(conversation, json_file, ensure_ascii=False)
+        return '', 204
 
 
 def build_messages(jailbreak):
@@ -88,8 +101,8 @@ def build_messages(jailbreak):
         conversation.append(prompt)
 
     # Reduce conversation size to avoid API Token quantity error
-    if len(conversation) > 3:
-        conversation = conversation[-4:]
+    if len(conversation) > 13:
+        conversation = conversation[-14:]
 
     return conversation
 

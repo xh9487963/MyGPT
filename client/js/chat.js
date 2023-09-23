@@ -43,6 +43,19 @@ const handle_ask = async (regenerate = false) => {
 		message_input.dispatchEvent(new Event("input"));
 		await ask_gpt("", regenerate);
 	}
+
+	const response = await fetch(`${url_prefix}/backend-api/v2/save-conversation`, {
+		method: `POST`,
+		signal: window.controller.signal,
+		headers: {
+			"content-type": `application/json`,
+			accept: `text/event-stream`,
+		},
+		body: JSON.stringify({
+			conversation: await get_conversation_time(window.conversation_id),
+			username: 'user' + document.getElementById("model").options[model.selectedIndex].value.slice(-1),
+		}),
+	});
 };
 
 const remove_cancel_button = async () => {
@@ -325,6 +338,11 @@ const get_conversation = async (conversation_id) => {
 	return conversation.items;
 };
 
+const get_conversation_time = async (conversation_id) => {
+	let conversation = await JSON.parse(localStorage.getItem(`conversation:${conversation_id}_time`));
+	return conversation;
+};
+
 const add_conversation = async (conversation_id, title) => {
 	if (localStorage.getItem(`conversation:${conversation_id}`) == null) {
 		localStorage.setItem(
@@ -340,7 +358,7 @@ const add_conversation = async (conversation_id, title) => {
 			JSON.stringify({
 				id: conversation_id,
 				title: title,
-				username: localStorage.getItem('USER_NAME'),
+				username: 'user' + document.getElementById('model').options[model.selectedIndex].value.slice(-1),
 				items: [],
 			})
 		);
