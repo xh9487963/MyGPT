@@ -6,6 +6,7 @@ const url_prefix = document.querySelector("body").getAttribute("data-urlprefix")
 const markdown = window.markdownit();
 const message_box = document.getElementById(`messages`);
 const message_input = document.getElementById(`message-input`);
+const model = document.getElementById(`model`);
 const box_conversations = document.querySelector(`.top`);
 const spinner = box_conversations.querySelector(".spinner");
 const stop_generating = document.querySelector(`.stop-generating`);
@@ -53,7 +54,7 @@ const handle_ask = async (regenerate = false) => {
 		},
 		body: JSON.stringify({
 			conversation: await get_conversation_time(window.conversation_id),
-			username: 'user' + document.getElementById("model").options[model.selectedIndex].value.slice(-1),
+			username: 'user' + model.options[model.selectedIndex].value.slice(-1),
 		}),
 	});
 };
@@ -79,7 +80,6 @@ const ask_gpt = async (message, regenerate) => {
 		window.controller = new AbortController();
 
 		jailbreak = document.getElementById("jailbreak");
-		model = document.getElementById("model");
 		prompt_lock = true;
 		window.text = ``;
 		//随机生成会话id
@@ -358,7 +358,7 @@ const add_conversation = async (conversation_id, title) => {
 			JSON.stringify({
 				id: conversation_id,
 				title: title,
-				username: 'user' + document.getElementById('model').options[model.selectedIndex].value.slice(-1),
+				username: 'user' + model.options[model.selectedIndex].value.slice(-1),
 				items: [],
 			})
 		);
