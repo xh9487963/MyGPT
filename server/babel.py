@@ -26,7 +26,8 @@ def create_babel(app):
 
 def get_locale():
     """Get the user's locale from the session or the request's accepted languages."""
-    return session.get('language') or request.accept_languages.best_match(BABEL_LANGUAGES)
+    "session.get('language') or request.accept_languages.best_match(BABEL_LANGUAGES)"
+    return 'zh_Hans_CN'
 
 
 def get_languages():
